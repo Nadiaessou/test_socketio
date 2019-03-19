@@ -11,6 +11,65 @@
 <!----------------- STYLE ----------------->
 
 <style>
+  /******************* REPONSES 1 *********************/
+.reponse1,
+.reponse2 {
+    width: 40%;
+    padding: 20px;
+    margin-left: 30px;
+    margin-right: 15px;
+    float: left;
+    overflow: hidden;
+}
+
+.reponse1:hover,
+.reponse2:hover {
+  background-color: rgba(0,0,0,0.2);
+}
+
+.reponses {
+  position: absolute;
+    width: 100%;
+    top: 40%;
+}
+#mask-terrien{
+  font-size:60px;
+  font-weight:700  ;
+  font-family: 'Lobster Two', cursive;
+  text-align:center;
+   text-shadow: 0px 2px 2px  rgba(0,0,0,0.2), 0px 2px 0px rgba(255,255,255,0.3);
+ background-image:-webkit-radial-gradient(center 10px,80px 100px, #111111 50%, brown 51%);
+background-size:40px 110px;  
+-webkit-background-clip: text; 
+-webkit-text-fill-color: transparent; 
+-webkit-animation-name: wave-animation; 
+-webkit-animation-duration: 13s ;  
+-webkit-animation-iteration-count:infinite; 
+-webkit-animation-timing-function: linear ; 
+}
+#mask-aquaphile{
+  font-size:60px;
+  font-weight:700  ;
+  font-family: 'Lobster Two', cursive;
+  text-align:center;
+   text-shadow: 0px 2px 2px  rgba(0,0,0,0.2), 0px 2px 0px rgba(255,255,255,0.3);
+ background-image:-webkit-radial-gradient(center 10px,80px 100px, #111111 50%, #0099ff 51%);
+background-size:40px 110px;  
+-webkit-background-clip: text; 
+-webkit-text-fill-color: transparent; 
+-webkit-animation-name: wave-animation; 
+-webkit-animation-duration: 13s ;  
+-webkit-animation-iteration-count:infinite; 
+-webkit-animation-timing-function: linear ; 
+}
+
+@-webkit-keyframes 'wave-animation'{ 
+ 0% {background-position:200px 10px;}
+ 50% {background-position:100px -20px;}
+100% {background-position:0px -40px;;}
+}
+
+/********************* FIN WATER **************************/
   body {
       background: url('https://nadia-essoubai.fr/interactions/img/bg.jpg');
       background-size: cover;
@@ -31,6 +90,10 @@
       position: absolute;
       width: 100%;
       top: 20%;
+  }
+
+  #button_test1 {
+    cursor: pointer;
   }
 
       /********** EXEMPLE 1 **********/
@@ -91,30 +154,37 @@
   /********** EXEMPLE 2 **********/
 
     #ball{
+      z-index: 20;
 	-webkit-transition: all;
 	transition: all;
 	position:absolute;
-	width:100px;
-	height:100px;
+	width:30px;
+	height:30px;
 	border-radius: 50%;
-	background: #9ac3dc;
+	background: #fff;
+  -webkit-box-shadow: 2px 2px 25px 2px rgba(0,0,0,0.2);
 }
 </style>
 
 
 <body onload="init()">
 
-  <h1>Choisissez une interaction</h1>
+  <h1 class="title1">Selectionnez une question</h1>
 
 
   <section id="page-test1">
-    <div class="test-element"></div>
-    <div class="test-element"></div>
-    <div class="test-element"></div>
-  </section>
-
-  <section id="page-test2">
-    <table class="table table-striped table-bordered">
+    <h1>êtes-vous plutôt :</h1>
+    
+    <div class="reponses">
+      <div class="reponse1">
+        <div id="mask-terrien">Terrien</div>
+      </div>
+      <div class="reponse2">
+        <div id="mask-aquaphile">Aquaphile</div>
+      </div>
+  </div>
+  <div id="ball"></div>
+    <!-- <table class="table table-striped table-bordered">
       <tr>
         <td>Tilt Left/Right [gamma]</td>
         <td id="doTiltLR"></td>
@@ -127,8 +197,13 @@
         <td>Direction [alpha]</td>
         <td id="doDirection"></td>
       </tr>
-    </table>
-    <div id="ball"></div>
+    </table> -->
+  </section>
+
+  <section id="page-test2">
+      <div class="test-element"></div>
+      <div class="test-element"></div>
+      <div class="test-element"></div>
   </section>
 
 
@@ -141,9 +216,9 @@
 
   <nav>
     <ul>
-      <li id="button_test1">Test 1</li>
-      <li id="button_test2">Test 2</li>
-      <li id="button_test3">Test 3</li>
+      <li id="button_test1">Question 1</li>
+      <li id="button_test2">Question 2</li>
+      <li id="button_test3">Question 3</li>
     </ul>
   </nav>
 
@@ -158,11 +233,11 @@
     var pageTest1 = document.getElementById('page-test1');
     var pageTest2 = document.getElementById('page-test2');
     var pageTest3 = document.getElementById('page-test3');
-    var title = document.querySelector('h1');
 
     var button1 = document.getElementById('button_test1');
     var button2 = document.getElementById('button_test2');
     var button3 = document.getElementById('button_test3');
+    var title1 = document.querySelector('.title1');
 
 
     // Get WebSocket
@@ -178,7 +253,7 @@
 
 
     /*************************************/
-    /************** TEST 1 **************/
+    /************** TEST 2 **************/
     /***********************************/
     function startDrag(e) {
       this.ontouchmove = this.onmspointermove = moveDrag;
@@ -233,14 +308,14 @@
       pageTest1.style.display = "block";
       pageTest2.style.display = "none";
       pageTest3.style.display = "none";
-      title.style.display = "none";
+      title1.style.display = "none";
     });
 
 
 
 
     /*************************************/
-    /************** TEST 2 **************/
+    /************** TEST 1 **************/
     /***********************************/
 
     if (!window.requestAnimationFrame) {
@@ -290,11 +365,13 @@
     }
 
     socket.on("animation", function(data){
-          ball.velocity.y = Math.round(-data.beta);
-          ball.velocity.x = Math.round(data.gamma);
-          document.getElementById("doTiltLR").innerHTML = Math.round(data.beta);
-          document.getElementById("doTiltFB").innerHTML = Math.round(data.gamma);
-          document.getElementById("doDirection").innerHTML = Math.round(data.alpha);
+      if (ball){
+          ball.velocity.y = Math.round(-data.beta)/2;
+          ball.velocity.x = Math.round(data.gamma)/2;
+          // document.getElementById("doTiltLR").innerHTML = Math.round(data.beta);
+          // document.getElementById("doTiltFB").innerHTML = Math.round(data.gamma);
+          // document.getElementById("doDirection").innerHTML = Math.round(data.alpha);
+      }
     });
   
     function update() {
@@ -322,6 +399,22 @@
 
       requestAnimationFrame(update);//KEEP ANIMATING
   };
+
+  /** detecte si la ball passe au dessus d'une reponse **/
+  function isHover(e) {
+  var reponse = document.querySelector('.reponse1');
+  return (e.reponse.querySelector(':hover') === e);
+}
+var myDiv = document.getElementById('ball');;
+document.addEventListener('mousemove', function checkHover() {
+  var hovered = isHover(myDiv);
+  if (hovered !== checkHover.hovered) {
+    console.log(hovered ? 'hovered' : 'not hovered');
+    checkHover.hovered = hovered;
+  }
+});
+
+
   
     /********** ACTIVATION PAGE 2 *********/
     button2.onclick = function () {
@@ -332,7 +425,7 @@
       pageTest2.style.display = "block";
       pageTest1.style.display = "none";
       pageTest3.style.display = "none";
-      title.style.display = "none";
+      title1.style.display = "none";
     });
     
 
@@ -372,7 +465,7 @@
       pageTest3.style.display = "block";
       pageTest2.style.display = "none";
       pageTest1.style.display = "none";
-      title.style.display = "none";
+      title1.style.display = "none";
     });
   </script>
 </body>
